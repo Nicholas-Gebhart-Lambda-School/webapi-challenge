@@ -38,4 +38,17 @@ router.put("/:id", (req, res) => {
     .catch(() => res.status(500).json(ner));
 });
 
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    res.status(404).json({ err: "must provide a valid id" });
+  }
+  projects
+    .remove(id)
+    .then(project => res.status(200).json(project))
+    .catch(() => {
+      res.status(500).json(ner);
+    });
+});
+
 module.exports = router;
