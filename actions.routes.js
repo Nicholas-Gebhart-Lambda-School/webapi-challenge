@@ -3,10 +3,23 @@ const actions = require("./data/helpers/actionModel");
 const projects = require("./data/helpers/projectModel");
 
 router.get("/", (req, res) => {
-  actions.get().then(actions => res.status(200).json(actions));
+  actions.get(req.project_id).then(actions => {
+    console.log(req.project_id);
+    res.status(200).json(actions);
+  });
 });
 
-router.post("", (req, res) => {});
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+  projects
+    .getProjectActions(id)
+    .then(actions => {
+      actions.length
+        ? res.status(200).json(actions)
+        : res.status(400).json({ err: "project id must be valid" });
+    })
+    .catch(() => res.status(500).json({ err: "server error" }));
+});
 
 router.put("/:id", (req, res) => {});
 
