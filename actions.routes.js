@@ -21,6 +21,24 @@ router.get("/:id", (req, res) => {
     .catch(() => res.status(500).json({ err: "server error" }));
 });
 
+router.post("/", (req, res) => {
+  const { project_id, notes, description } = req.body;
+  if (!project_id || !notes || !description) {
+    res
+      .status(400)
+      .json({ err: "project_id, notes, and description are required" });
+  } else {
+    projects.get(project_id).then(project => {
+      project
+        ? actions
+            .insert({ notes, description, project_id })
+            .then(action => res.status(200).json(action))
+            .catch(() => res.status(500).json({ err: "server error" }))
+        : res.status(400).json({ err: "must enter valid project_id" });
+    });
+  }
+});
+
 router.put("/:id", (req, res) => {});
 
 router.delete("/:id", (req, res) => {
