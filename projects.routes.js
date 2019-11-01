@@ -23,4 +23,19 @@ router.post("/", (req, res) => {
   }
 });
 
+router.put("/:id", (req, res) => {
+  const { name, description } = req.body;
+  const { id } = req.params;
+
+  projects
+    .update(id, { name, description })
+    .then(project => {
+      if (!project) {
+        res.status(404).json({ err: "must provide a valid id" });
+      }
+      res.status(200).json(project);
+    })
+    .catch(() => res.status(500).json(ner));
+});
+
 module.exports = router;
