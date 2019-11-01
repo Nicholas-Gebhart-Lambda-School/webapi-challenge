@@ -7,6 +7,11 @@ router.get("/", (req, res) => {
   projects.get().then(projects => res.status(200).json(projects));
 });
 
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+  projects.get(id).then(project => res.status(200).json(project));
+});
+
 router.post("/", (req, res) => {
   const { name, description } = req.body;
   const completed = req.body.completed || false;
@@ -24,11 +29,11 @@ router.post("/", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, completed } = req.body;
   const { id } = req.params;
 
   projects
-    .update(id, { name, description })
+    .update(id, { name, description, completed })
     .then(project => {
       if (!project) {
         res.status(404).json({ err: "must provide a valid id" });

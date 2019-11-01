@@ -39,7 +39,17 @@ router.post("/", (req, res) => {
   }
 });
 
-router.put("/:id", (req, res) => {});
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const { description, notes, completed } = req.body;
+  if (!id) {
+    res.status(404).json({ err: "must enter a valid id" });
+  } else {
+    actions
+      .update(id, { description, notes, completed })
+      .then(action => res.status(200).json(action));
+  }
+});
 
 router.delete("/:id", (req, res) => {
   const { id } = req.params;
